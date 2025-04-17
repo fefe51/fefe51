@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Botwin Web Démo - Thème Sombre</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-weight: normal;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      border: 1px solid #333;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background-color: #333333;
+    }
+    #result {
+      white-space: pre-wrap;
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Démo Botwin Web</h1>
+
+  <div class="section">
+    <h2>Analyse de match (GrimPlay)</h2>
+    <label for="match">Saisis un match (ex: PSG vs Real Madrid)</label>
+    <input type="text" id="match" placeholder="Équipe A vs Équipe B">
+    <button onclick="analyzeMatch()">Analyser</button>
+  </div>
+
+  <div class="section">
+    <h2>Analyse de ticket scanné (MemoTrack)</h2>
+    <label for="ticket">Décris ton ticket (ex: 3 sélections, match nul, outsider...)</label>
+    <textarea id="ticket" rows="3"></textarea>
+    <button onclick="analyzeTicket()">Analyser</button>
+  </div>
+
+  <div class="section">
+    <h2>Analyse Turf (Taoufik)</h2>
+    <label for="turf">Saisis une course SOREC (ex: Saint-Cloud 15/04)</label>
+    <input type="text" id="turf" placeholder="Lieu + Date">
+    <button onclick="analyzeTurf()">Analyser</button>
+  </div>
+
+  <div class="section">
+    <h2>Résultat</h2>
+    <div id="result">Les résultats s'affichent ici…</div>
+  </div>
+
+  <script>
+    function analyzeMatch() {
+      const m = document.getElementById('match').value;
+      document.getElementById('result').innerText = 
+        `🔍 Analyse de "${m}" (demo)
+- Contexte général
+- Statistiques clés
+- Note de confiance: 75%
+- Recommandation: Pari sur l'équipe A (cote 1.80)`;
+    }
+    function analyzeTicket() {
+      const t = document.getElementById('ticket').value;
+      document.getElementById('result').innerText = 
+        `📄 Analyse de ticket (demo)
+Contenu: "${t}"
+- Value bets identifiés
+- 2/3 favoris solides
+- Conseil: réduire à 1 outsider par combiné`;
+    }
+    function analyzeTurf() {
+      const c = document.getElementById('turf').value;
+      document.getElementById('result').innerText = 
+        `🏇 Analyse de "${c}" (demo)
+- Pedigree détaillé
+- Facteurs X détectés
+- Chevaux recommandés: 3, 5, 7`;
+    }
+  </script>
+</body>
+</html>
