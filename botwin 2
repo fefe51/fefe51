@@ -1,0 +1,118 @@
+# grim/football_analysis/winamax_parser.py
+
+import json
+import random
+
+def get_mocked_odds():
+    """
+    Simule les cotes récupérées depuis Winamax pour quelques matchs.
+    """
+    return [
+        {"match": "PSG vs Marseille", "home": 1.80, "draw": 3.60, "away": 4.20},
+        {"match": "Real Madrid vs Barca", "home": 2.10, "draw": 3.50, "away": 3.00},
+        {"match": "Bayern vs Dortmund", "home": 1.95, "draw": 3.40, "away": 3.90}
+    ]
+
+def get_best_value_bets(odds_data, threshold=2.0):
+    """
+    Filtre les matchs avec une cote > threshold (valeur élevée).
+    """
+    return [match for match in odds_data if max(match["home"], match["draw"], match["away"]) > threshold]
+
+if __name__ == "__main__":
+    odds = get_mocked_odds()
+    best_bets = get_best_value_bets(odds)
+    print(json.dumps(best_bets, indent=2))# grim/football_analysis/stats_engine.py
+
+def analyze_team_form(team_name):
+    """
+    Simule une analyse de forme d’équipe.
+    """
+    form = {
+        "last_5_matches": ["W", "W", "D", "L", "W"],
+        "average_goals_scored": 2.1,
+        "average_goals_conceded": 1.2
+    }
+    return form
+
+def estimate_outcome(home_team, away_team):
+    """
+    Retourne un score prévisionnel basé sur des règles simples.
+    """
+    home_form = analyze_team_form(home_team)
+    away_form = analyze_team_form(away_team)
+
+    home_score = round(home_form["average_goals_scored"], 1)
+    away_score = round(away_form["average_goals_conceded"], 1)
+
+    return f"{home_team} {home_score} - {away_score} {away_team}"# grim/football_analysis/logic_builder.py
+
+from winamax_parser import get_mocked_odds
+from stats_engine import estimate_outcome
+
+def generate_betting_advice():
+    odds = get_mocked_odds()
+    advice_list = []
+
+    for match in odds:
+        teams = match["match"].split(" vs ")
+        estimation = estimate_outcome(teams[0], teams[1])
+        best_bet = max(("home", match["home"]), ("draw", match["draw"]), ("away", match["away"]), key=lambda x: x[1])
+
+        advice_list.append({
+            "match": match["match"],
+            "estimation": estimation,
+            "best_bet": best_bet[0],
+            "value": best_bet[1]
+        })
+    
+  return advice_list
+# grim/mode_solo/emotion_tracker.py
+
+def classify_loss_behavior(pari_justification, résultat):
+    """
+    Déduit un profil émotionnel en cas de perte.
+    """
+    if résultat == "perdu" and "intuition" in pari_justification:
+        return "frustration", "Tu as suivi ton instinct sans base solide. Ça arrive."
+    elif résultat == "perdu" and "logique" in pari_justification:
+        return "déception", "Ton raisonnement était bon, mais le foot reste imprévisible."
+    else:
+        return "indifférent", "Perte neutre, tu as testé sans engagement émotionnel."
+
+def simulate_user_reaction():
+    return classify_loss_behavior("pari basé sur intuition", "perdu")# grim/mode_solo/feedback_engine.py
+
+def generate_feedback(emotion_type):
+    messages = {
+        "frustration": "Essaie de lier ton instinct à des données concrètes pour éviter les erreurs.",
+        "déception": "Continue comme ça, affine ton modèle, ne change pas toute ta stratégie.",
+        "indifférent": "Teste différentes méthodes pour voir ce qui te correspond le mieux."
+    }
+    return messages.get(emotion_type, "Revois tes choix calmement.")# grim/main_grim.py
+
+from football_analysis.logic_builder import generate_betting_advice
+from mode_solo.emotion_tracker import classify_loss_behavior
+from mode_solo.feedback_engine import generate_feedback
+from mode_solo.memory_adjuster import adjust_logic_after_loss
+
+if __name__ == "__main__":
+    print("📊 Analyse Foot avec GrimPlay\n")
+    advices = generate_betting_advice()
+
+    for adv in advices:
+        print(f"Match: {adv['match']} | Estimé: {adv['estimation']}")
+        print(f"💡 Conseil: Parier sur {adv['best_bet']} (valeur: {adv['value']})\n")
+
+    print("🧠 Analyse émotion post-perte (Mode Solo)")
+    emotion, reason = classify_loss_behavior("pari basé sur intuition", "perdu")
+    print(f"Émotion détectée : {emotion} | Explication : {reason}")
+
+    feedback = generate_feedback(emotion)
+    print(f"🎓 Conseil de Grim : {feedback}")
+
+    # Simule historique utilisateur
+    memory = []
+    updated_memory = adjust_logic_after_loss(memory, feedback)
+    print("\n🗃 Historique ajusté :")
+    print(updated_memory)
